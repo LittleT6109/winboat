@@ -5,7 +5,6 @@ echo "Building guest server..."
 
 # Variables
 export GOOS=windows
-export GOARCH=amd64
 export PACKAGE=winboat-server
 export VERSION="$(bun -p "require('./package.json').version")"
 export COMMIT_HASH="$(git rev-parse --short HEAD)"
@@ -41,9 +40,23 @@ else
     echo "⚠ Warning: nssm.exe or nssm.sha1.txt not found, skipping integrity check"
 fi
 
-# Build the guest server
-go build -ldflags="${LDFLAGS[*]}" -o winboat_guest_server.exe *.go
-rm -f winboat_guest_server.zip
-zip -r winboat_guest_server.zip .
+build_arch() {
+    local go_arch="$1"
+    local package_arch="$2"
+    local zip_name="winboat_guest_server_${package_arch}.zip"
 
-echo "Guest server built: guest_server/winboat_guest_server.zip"
+    echo "Building guest server for ${package_arch}..."
+
+    export GOARCH="$go_arch"
+    go build -ldflags="${LDFLAGS[*]}" -o winboat_guest_server.exe *.go
+
+    rm -f "$zip_name"
+    zip -r "$zip_name" . -x "winboat_guest_server_*.zip"
+
+    echo "Guest server built: guest_server/${zip_name}"
+}
+
+build_arch "amd64" "x64"
+build_arch "arm64" "arm64"
+
+echo "Guest server builds complete."

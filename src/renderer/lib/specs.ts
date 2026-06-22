@@ -23,6 +23,10 @@ export const defaultSpecs: Specs = {
     freeRDP3Installed: false,
 };
 
+export function getArch() {
+    return process.arch;
+}
+
 export async function getSpecs() {
     const specs: Specs = { ...defaultSpecs };
 

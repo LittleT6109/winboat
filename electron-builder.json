@@ -16,7 +16,24 @@
     },
     "linux": {
         "icon": "icons/winboat_logo.svg",
-        "target": ["appimage", "deb", "rpm", "tar.bz2"],
+        "target": [
+            {
+                "target": "appimage",
+                "arch": ["x64", "arm64"]
+            },
+            {
+                "target": "deb",
+                "arch": ["x64", "arm64"]
+            },
+            {
+                "target": "rpm",
+                "arch": ["x64", "arm64"]
+            },
+            {
+                "target": "tar.bz2",
+                "arch": ["x64", "arm64"]
+            }
+        ],
         "category": "Utility",
         "artifactName": "${name}-${version}-${arch}.${ext}"
     },
@@ -42,9 +59,8 @@
     ],
     "extraResources": [
         {
-            "from": "./guest_server",
-            "to": "guest_server",
-            "filter": ["**/*"]
+            "from": "./guest_server/winboat_guest_server_${arch}.zip",
+            "to": "guest_server/winboat_guest_server.zip"
         },
         {
             "from": "./data",

@@ -1,5 +1,11 @@
 import { ComposeConfig } from "../../types";
 import { RESTART_ON_FAILURE } from "../lib/constants";
+import { getArch } from "../lib/specs";
+
+const IMAGE =
+    getArch() === "x64"
+        ? "ghcr.io/dockur/windows:5.16"
+        : "ghcr.io/dockur/windows-arm:5.15"; // 5.16 is not released for ARM yet
 
 export const PODMAN_DEFAULT_COMPOSE: ComposeConfig = {
     name: "winboat",
@@ -8,7 +14,7 @@ export const PODMAN_DEFAULT_COMPOSE: ComposeConfig = {
     },
     services: {
         windows: {
-            image: "ghcr.io/dockur/windows:5.16",
+            image: IMAGE,
             container_name: "WinBoat",
             environment: {
                 VERSION: "11",
